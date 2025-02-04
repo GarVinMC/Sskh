@@ -5,7 +5,7 @@ const options = {
   webName: "Dasbotz Api Playground",
   description: "Rest API",
   favicon:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Black.png/220px-Black.png",
+    "https://files.catbox.moe/t37z92.jpg",
 };
 
 const host = {
