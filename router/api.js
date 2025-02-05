@@ -35,9 +35,13 @@ router.get("/kalender/harilibur", async (req, res) => {
   }
 
   const country = 'ID';
+  
+  // Select a random API key from the list
+  const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
 
   try {
-    const holidays = await getHolidayData(country, year);
+    // Assuming getHolidayData now accepts an API key parameter
+    const holidays = await getHolidayData(country, year, apiKey);
 
     if (holidays.length === 0) {
       return res.json({ status: true, message: "No holidays found", holidays: [] });
