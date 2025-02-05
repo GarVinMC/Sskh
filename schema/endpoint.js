@@ -47,7 +47,7 @@ const swaggerDocument = {
     },
   ],
   paths: {
-    "/api/tes/tes": {
+    "/api/kalender/harilibur": {
       get: {
         tags: ["Harilibur"],
         summary: "Get Public Holidays in Indonesia",
