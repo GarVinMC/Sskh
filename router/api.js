@@ -28,14 +28,16 @@ const messages = {
 };
 
 router.get("/kalender/harilibur", async (req, res) => {
-  const { country, year, apiKey } = req.query;  // Get country, year, and apiKey from query parameters
+  const { year } = req.query;
 
-  if (!country || !year || !apiKey) {
-    return res.status(400).json({ status: false, message: "Please provide country, year, and apiKey" });
+  if (!year) {
+    return res.status(400).json({ status: false, message: "Please provide a year" });
   }
 
+  const country = 'ID';
+
   try {
-    const holidays = await getHolidayData(country, year, apiKey);
+    const holidays = await getHolidayData(country, year);
 
     if (holidays.length === 0) {
       return res.json({ status: true, message: "No holidays found", holidays: [] });
