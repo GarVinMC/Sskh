@@ -42,8 +42,8 @@ const swaggerDocument = {
   ],
   tags: [
     {
-      name: "Harilibur",
-      description: "API endpoint for retrieving public holidays in Indonesia.",
+      name: "Search Api",
+      description: "API endpoint in Indonesia.",
     },
   ],
   paths: {
