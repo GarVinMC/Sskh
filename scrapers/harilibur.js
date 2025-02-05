@@ -1,20 +1,28 @@
-const { getHolidayData } = require('./path-to-your-file');
+const axios = require('axios');
 
-// Ganti dengan API key yang baru
-const apiKey = 'e1168ed6-f78e-4671-b04b-7c987c7c3607'; 
-const country = 'ID'; // Indonesia
+// Function to get holiday data for a given country and year
+const getHolidayData = async (country, year, apiKey) => {
+  const url = `https://holidayapi.com/v1/holidays`;
+  const params = {
+    key: apiKey,
+    country: country,  // Country code (e.g., 'ID' for Indonesia)
+    year: year,        // Year for which holidays are being requested
+    public: true,      // Filter for public holidays
+  };
 
-// Fungsi untuk meminta tahun sebagai parameter
-const getHolidaysForYear = (year) => {
-  getHolidayData(country, year, apiKey)
-    .then(holidays => {
-      console.log(holidays); // Menampilkan data libur
-    })
-    .catch(error => {
-      console.error("Error fetching holidays:", error);
-    });
+  try {
+    // Make a GET request to the holiday API
+    const response = await axios.get(url, { params });
+    // Return the holiday data if successful
+    if (response.data && response.data.holidays) {
+      return response.data.holidays;
+    }
+    // If no holidays are found, return an empty array
+    return [];
+  } catch (error) {
+    console.error("Error fetching holiday data:", error);
+    throw error;
+  }
 };
 
-// Menggunakan tahun yang diminta (misalnya 2025)
-const requestedYear = 2025;
-getHolidaysForYear(requestedYear);
+module.exports = { getHolidayData };
