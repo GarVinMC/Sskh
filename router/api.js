@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const config = require("../schema/config");
-const {getHolidayData } = reduire("../scrapers/harilibur");
+const {getHolidayData } = require("../scrapers/harilibur");
 const { developer: dev } = config.options;
 
 const messages = {
