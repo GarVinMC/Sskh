@@ -1,6 +1,7 @@
 const axios = require('axios');
 
 const getHolidayData = async (country, year) => {
+  const apiKey = `da52f6ad-1e74-4316-aa42-447938434d62`;
   const url = `https://holidayapi.com/v1/holidays`;
   const params = {
     key: apiKey,
