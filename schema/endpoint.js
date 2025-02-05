@@ -42,39 +42,29 @@ const swaggerDocument = {
   ],
   tags: [
     {
-      name: "AI",
-      description:
-        "API endpoints for artificial intelligence content from various platforms.",
+      name: "Harilibur",
+      description: "API endpoint for retrieving public holidays in Indonesia.",
     },
-    // {
-    //   name: "Downloader",
-    //   description:
-    //     "API endpoints for downloading content from various platforms.",
-    // },
-    // {
-    //   name: "Tools",
-    //   description: "API endpoints for content tools from multiple platforms.",
-    // },
   ],
   paths: {
-    "/api/ai/chatgpt": {
+    "/kalender/harilibur": {
       get: {
-        tags: ["AI"],
-        summary: "Chat with GPT AI",
+        tags: ["Harilibur"],
+        summary: "Get Public Holidays in Indonesia",
         parameters: [
           {
             in: "query",
-            name: "query",
+            name: "year",
             schema: {
               type: "string",
             },
             required: true,
-            description: inQuery,
+            description: "Please input the year to retrieve holidays.",
           },
         ],
         responses: {
           200: {
-            description: "Result successfully returned",
+            description: "Holidays for the requested year",
             content: {
               "application/json": {
                 schema: {
@@ -89,11 +79,18 @@ const swaggerDocument = {
                       example: config.options.developer,
                     },
                     result: {
-                      type: "object",
-                      properties: {
-                        message: {
-                          type: "string",
-                          example: "Hello! How can I help you today?",
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          date: {
+                            type: "string",
+                            example: "2025-01-01",
+                          },
+                          holiday_name: {
+                            type: "string",
+                            example: "Tahun Baru",
+                          },
                         },
                       },
                     },
@@ -102,36 +99,8 @@ const swaggerDocument = {
               },
             },
           },
-        },
-      },
-    },
-    "/api/ai/gptlogic": {
-      get: {
-        tags: ["AI"],
-        summary: "Chat with GPT Logic",
-        parameters: [
-          {
-            in: "query",
-            name: "query",
-            schema: {
-              type: "string",
-            },
-            required: true,
-            description: inQuery,
-          },
-          {
-            in: "query",
-            name: "prompt",
-            schema: {
-              type: "string",
-            },
-            required: true,
-            description: inQuery,
-          },
-        ],
-        responses: {
-          200: {
-            description: "Result successfully returned",
+          400: {
+            description: "Missing year parameter",
             content: {
               "application/json": {
                 schema: {
@@ -139,21 +108,51 @@ const swaggerDocument = {
                   properties: {
                     status: {
                       type: "boolean",
-                      example: true,
-                    },
-                    developer: {
-                      type: "string",
-                      example: config.options.developer,
+                      example: false,
                     },
                     result: {
-                      type: "object",
-                      properties: {
-                        message: {
-                          type: "string",
-                          example:
-                            "Hello! How can I help you with your prompt?",
-                        },
-                      },
+                      type: "string",
+                      example: "Please input parameter year!",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: "No holidays found for the given year",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    status: {
+                      type: "boolean",
+                      example: false,
+                    },
+                    result: {
+                      type: "string",
+                      example: "Error, Invalid JSON Result",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: {
+            description: "Server error",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    status: {
+                      type: "boolean",
+                      example: false,
+                    },
+                    result: {
+                      type: "string",
+                      example: "Error, Service Unavailable",
                     },
                   },
                 },
