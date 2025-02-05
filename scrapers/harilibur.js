@@ -1,23 +1,27 @@
 const axios = require('axios');
+const apiKeys = [
+  'api_key_1',
+  'api_key_2',
+  'api_key_3',
+  'api_key_4',
+  'api_key_5'
+];
 
-// Function to get holiday data for a given country and year
-const getHolidayData = async (country, year, apiKey) => {
+const getHolidayData = async (country, year) => {
+  const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]; 
   const url = `https://holidayapi.com/v1/holidays`;
   const params = {
     key: apiKey,
-    country: country,  // Country code (e.g., 'ID' for Indonesia)
-    year: year,        // Year for which holidays are being requested
-    public: true,      // Filter for public holidays
+    country: country,  
+    year: year,        
+    public: true,     
   };
 
   try {
-    // Make a GET request to the holiday API
     const response = await axios.get(url, { params });
-    // Return the holiday data if successful
     if (response.data && response.data.holidays) {
       return response.data.holidays;
     }
-    // If no holidays are found, return an empty array
     return [];
   } catch (error) {
     console.error("Error fetching holiday data:", error);
