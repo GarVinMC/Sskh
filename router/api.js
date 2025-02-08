@@ -1,9 +1,11 @@
 const express = require("express");
+const fs = require('fs');
+const https = require('https');
+const path = require('path');
 const router = express.Router();
 const config = require("../schema/config");
-const {getHolidayData } = require("../scrapers/harilibur");
 const { developer: dev } = config.options;
-
+const { downloadTikTokVideo } = require('../scrapers/tiktok'); 
 const messages = {
   error: {
     status: 404,
@@ -27,35 +29,44 @@ const messages = {
   },
 };
 
-router.get("/kalender/harilibur", async (req, res) => {
-  const { year } = req.query;
+// Endpoint untuk mendownload video TikTok
+router.get("/download", async (req, res) => {
+  const { url } = req.query;
 
-  if (!year) {
-    return res.status(400).json({ status: false, message: "Please provide a year" });
+  if (!url) {
+    return res.status(400).json({ status: false, message: "Please provide a TikTok video URL" });
   }
 
-  const country = 'ID';
-
   try {
-    const holidays = await getHolidayData(country, year);
+    // Mendapatkan URL video TikTok dari halaman
+    const videoUrl = await downloadTikTokVideo(url);
 
-    if (holidays.length === 0) {
-      return res.json({ status: true, message: "No holidays found", holidays: [] });
+    if (!videoUrl) {
+      return res.status(404).json({ status: false, message: "Video not found on the provided URL" });
     }
 
-    const holidayDates = holidays.map(holiday => ({
-      date: holiday.date,
-      name: holiday.name
-    }));
+    // Mengunduh video
+    const filePath = path.join(__dirname, '..', 'tiktok_video.mp4');
+    const file = fs.createWriteStream(filePath);
 
-    res.json({
-      status: true,
-      holidays: holidayDates
+    https.get(videoUrl, (response) => {
+      response.pipe(file);
+
+      file.on('finish', () => {
+        res.download(filePath, 'tiktok_video.mp4', (err) => {
+          if (err) {
+            return res.status(500).json({ status: false, message: "Error sending the video file" });
+          }
+          // Hapus file setelah selesai dikirim
+          fs.unlinkSync(filePath);
+        });
+      });
     });
+
   } catch (error) {
     res.status(500).json({
       status: false,
-      message: "Error fetching holiday data",
+      message: "Error fetching video data",
       error: error.message
     });
   }
