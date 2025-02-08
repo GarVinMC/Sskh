@@ -24,7 +24,8 @@
     "qs": "^6.12.1",
     "spinnies": "^0.5.1",
     "swagger-themes": "^1.4.3",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "puppeteer": "^20.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.2",
